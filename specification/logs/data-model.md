@@ -1068,7 +1068,7 @@ to OpenTelemetry log records.
   </tr>
 </table>
 
-## Elastic Common Schema
+### Elastic Common Schema
 
 <table>
   <tr>
