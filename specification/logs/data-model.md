@@ -44,6 +44,7 @@
   * [Apache HTTP Server access log](#apache-http-server-access-log)
   * [CloudTrail Log Event](#cloudtrail-log-event)
   * [Google Cloud Logging](#google-cloud-logging)
+  * [Azure Resource Logs](#azure-resource-logs)
 - [Elastic Common Schema](#elastic-common-schema)
 - [Appendix B: `SeverityNumber` example mappings](#appendix-b-severitynumber-example-mappings)
 - [References](#references)
@@ -1068,7 +1069,7 @@ to OpenTelemetry log records.
   </tr>
 </table>
 
-### Elastic Common Schema
+## Elastic Common Schema
 
 <table>
   <tr>
