@@ -956,6 +956,118 @@ labels           | map<string,string> | A set of user-defined (key, value) data 
 http_request     | HttpRequest        | The HTTP request associated with the log entry, if any. | Attributes["gcp.http_request"]
 All other fields |                    |                                                         | Attributes["gcp.*"]
 
+### Azure Resource Logs
+
+All Azure resource logs follow the
+[top-level common schema](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/resource-logs-schema#top-level-common-schema)
+published by Microsoft. This table provides a mapping from Azure resource logs
+to OpenTelemetry log records.
+
+<table>
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Description</th>
+    <th>Maps to Unified Model Field</th>
+  </tr>
+  <tr>
+    <td>callerIpAddress</td>
+    <td>string</td>
+    <td>The caller IP address, if the operation corresponds to an API call that would come from an entity with a publicly available IP address.</td>
+    <td>Attributes["net.sock.peer.addr"]</td>
+  </tr>
+  <tr>
+    <td>correlationId</td>
+    <td>string</td>
+    <td>A GUID that's used to group together a set of related events. Typically, if two events have the same operationName value but two different statuses (for example, Started and Succeeded), they share the same correlationID value. This might also represent other relationships between events.</td>
+    <td>Attribute["azure.correlation.id"]</td>
+  </tr>
+  <tr>
+    <td>category</td>
+    <td>string</td>
+    <td>The log category of the event. Category is the granularity at which you can enable or disable logs on a particular resource. The properties that appear within the properties blob of an event are the same within a particular log category and resource type. Typical log categories are Audit, Operational, Execution, and Request.</td>
+    <td>Attributes["azure.category"]</td>
+  </tr>
+  <tr>
+    <td>durationMs</td>
+    <td>string</td>
+    <td>The duration of the operation in milliseconds.</td>
+    <td>Attributes["azure.duration"]</td>
+  </tr>
+  <tr>
+    <td>Level</td>
+    <td>string</td>
+    <td>The severity level of the event. Must be one of Informational, Warning, Error, or Critical.</td>
+    <td>fields["severity_number"], fields["severity_text"]</td>
+  </tr>
+  <tr>
+    <td>location</td>
+    <td>string</td>
+    <td>The region of the resource emitting the event; for example, East US or France South.</td>
+    <td>Attributes["cloud.region"]</td>
+  </tr>
+  <tr>
+    <td>operationName</td>
+    <td>string</td>
+    <td>The name of the operation that this event represents. If the event represents an Azure role-based access control (RBAC) operation, this is the Azure RBAC operation name (for example, Microsoft.Storage/storageAccounts/blobServices/blobs/Read). This name is typically modeled in the form of an Azure Resource Manager operation, even if it's not a documented Resource Manager operation: (Microsoft.{providerName}/{resourceType}/{subtype}/{Write|Read|Delete|Action}).</td>
+    <td>Attributes["azure.operation.name"]</td>
+  </tr>
+  <tr>
+    <td>operationVersion</td>
+    <td>string</td>
+    <td>The API version associated with the operation, if operationName was performed through an API (for example, http://myservice.windowsazure.net/object?api-version=2016-06-01). If no API corresponds to this operation, the version represents the version of that operation in case the properties associated with the operation change in the future.</td>
+    <td>Attributes["azure.operation.version"]</td>
+  </tr>
+  <tr>
+    <td>properties</td>
+    <td>map</td>
+    <td>Any extended properties related to this category of events. All custom or unique properties must be put inside this "Part B" of the schema.</td>
+    <td>Attributes["azure.properties"]</td>
+  </tr>
+  <tr>
+    <td>resourceId</td>
+    <td>string</td>
+    <td>The resource ID of the resource that emitted the event. For tenant services, this is of the form /tenants/tenant-id/providers/provider-name.</td>
+    <td>Resource["azure.resource.id"]</td>
+  </tr>
+  <tr>
+    <td>resultDescription</td>
+    <td>string</td>
+    <td>The static text description of this operation; for example, Get storage file.</td>
+    <td>Attributes["azure.result.description"]</td>
+  </tr>
+  <tr>
+    <td>resultSignature</td>
+    <td>string</td>
+    <td>The substatus of the event. If this operation corresponds to a REST API call, this field is the HTTP status code of the corresponding REST call.</td>
+    <td>Attributes["azure.result.signature"]</td>
+  </tr>
+  <tr>
+    <td>resultType</td>
+    <td>string</td>
+    <td>The status of the event. Typical values include Started, In Progress, Succeeded, Failed, Active, and Resolved.</td>
+    <td>Attributes["azure.result.type"]</td>
+  </tr>
+  <tr>
+    <td>tenantId</td>
+    <td>string</td>
+    <td>The tenant ID of the Active Directory tenant that this event is tied to. This property is used only for tenant-level logs. It does not appear in resource-level logs.</td>
+    <td>Attributes["azure.tenant.id"]</td>
+  </tr>
+  <tr>
+    <td>time</td>
+    <td>string</td>
+    <td>The timestamp (UTC) of the event.</td>
+    <td>fields["time_unix_nano"]</td>
+  </tr>
+  <tr>
+    <td>identity</td>
+    <td>map</td>
+    <td>A JSON blob that describes the identity of the user or application that performed the operation. Typically, this field includes the authorization and claims or JWT token from Active Directory.</td>
+    <td>Attributes["azure.identity"]</td>
+  </tr>
+</table>
+
 ## Elastic Common Schema
 
 <table>
